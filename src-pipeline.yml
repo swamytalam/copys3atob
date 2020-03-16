@@ -1,0 +1,37 @@
+
+ 
+ Resources:
+  #SandBox IAM Role to access S3 Buckets
+  S3ObjectsSBAccountRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      Description: Role for Copying S3 Objects from SB Account to DEV Account
+      RoleName: IAMRoleinSandBoxAccount
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: 'Allow'
+            Principal:
+              Service:
+                - 's3.amazonaws.com'
+            Action:
+              - 'sts:AssumeRole'
+      PermissionsBoundary: !Sub 'arn:aws:iam::933411321547:policy/PermissionBoundary'
+
+      Policies:
+        - PolicyName: S3PilicyAllowDevAccount
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Sid: DelegateS3Access
+                Effect: Allow
+                Principal:
+                  - AWS: 'arn:aws:iam::900182000710:role/IAMRoleinDevAccount'  #Dev Account ID, match with Role name below line no #41
+                Action:
+                  - 's3:ListBucket'
+                  - 's3:GetObject' 
+                Resource:
+                  - !Sub 'arn:aws:s3:::behave-source-bucket'
+                  - !Sub 'arn:aws:s3:::behave-source-bucket/*'
+   
+
+

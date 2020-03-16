@@ -1,0 +1,48 @@
+
+ 
+ Resources:
+    
+  # Dev Account IAM Role to access SB S3 and Put in Dev Account
+  S3ObjectsDevAccountRole:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      Description: Role for Copying S3 Objects from SB Account to DEV Account
+      RoleName: IAMRoleinDevAccount
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: 'Allow'
+            Principal:
+              Service:
+                - 's3.amazonaws.com'
+            Action:
+              - 'sts:AssumeRole'
+      PermissionsBoundary: !Sub 'arn:aws:iam::900182000710:policy/PermissionBoundary'
+
+      Policies:
+        - PolicyName: S3PilicyAllowDevAccount
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+
+              - Sid: AccessSandBoxAccountS3Bucket
+                Effect: Allow
+                Action:
+                  - 's3:ListBucket'
+                  - 's3:GetObject'                   
+                Resource:
+                  - !Sub 'arn:aws:s3:::behave-source-bucket'
+                  - !Sub 'arn:aws:s3:::behave-source-bucket/*'
+
+                - Sid: WriteInDevAccountS3Bucket
+                Effect: Allow
+                Action:
+                  - 's3:ListBucket'
+                  - 's3:PutObject' 
+                  - 's3:PutObjectAcl'                                    
+                Resource:
+                  - !Sub 'arn:aws:s3:::test-src-bucket01'
+                  - !Sub 'arn:aws:s3:::test-src-bucket01/*'
+  
+
+# Run below command as B IAM ROle
+# aws s3 sync s3://source-bucket s3://target-bucket 
