@@ -16,7 +16,7 @@
                 - 's3.amazonaws.com'
             Action:
               - 'sts:AssumeRole'
-      PermissionsBoundary: !Sub 'arn:aws:iam::900182000710:policy/PermissionBoundary'
+      PermissionsBoundary: !Sub 'arn:aws:iam::$(TARGET_AWS):policy/PermissionBoundary'
 
       Policies:
         - PolicyName: S3PilicyAllowDevAccount
@@ -30,8 +30,8 @@
                   - 's3:ListBucket'
                   - 's3:GetObject'                   
                 Resource:
-                  - !Sub 'arn:aws:s3:::behave-source-bucket'
-                  - !Sub 'arn:aws:s3:::behave-source-bucket/*'
+                  - !Sub 'arn:aws:s3:::$(SRC_BUCKET)'
+                  - !Sub 'arn:aws:s3:::$(SRC_BUCKET)/*'
 
                 - Sid: WriteInDevAccountS3Bucket
                 Effect: Allow
@@ -40,8 +40,8 @@
                   - 's3:PutObject' 
                   - 's3:PutObjectAcl'                                    
                 Resource:
-                  - !Sub 'arn:aws:s3:::test-src-bucket01'
-                  - !Sub 'arn:aws:s3:::test-src-bucket01/*'
+                  - !Sub 'arn:aws:s3:::$(TARGET_BUCKET)'
+                  - !Sub 'arn:aws:s3:::$(TARGET_BUCKET)/*'
   
 
 # Run below command as B IAM ROle

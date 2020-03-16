@@ -15,7 +15,7 @@
                 - 's3.amazonaws.com'
             Action:
               - 'sts:AssumeRole'
-      PermissionsBoundary: !Sub 'arn:aws:iam::933411321547:policy/PermissionBoundary'
+      PermissionsBoundary: !Sub 'arn:aws:iam::$(SRC_AWS):policy/PermissionBoundary'
 
       Policies:
         - PolicyName: S3PilicyAllowDevAccount
@@ -25,13 +25,13 @@
               - Sid: DelegateS3Access
                 Effect: Allow
                 Principal:
-                  - AWS: 'arn:aws:iam::900182000710:role/IAMRoleinDevAccount'  #Dev Account ID, match with Role name below line no #41
+                  - AWS: 'arn:aws:iam::$(TARGET_AWS):role/IAMRoleinDevAccount'  #Dev Account ID, match with Role name below line no #41
                 Action:
                   - 's3:ListBucket'
                   - 's3:GetObject' 
                 Resource:
-                  - !Sub 'arn:aws:s3:::behave-source-bucket'
-                  - !Sub 'arn:aws:s3:::behave-source-bucket/*'
+                  - !Sub 'arn:aws:s3:::$(SRC_BUCKET)'
+                  - !Sub 'arn:aws:s3:::$(SRC_BUCKET)/*'
    
 
 
